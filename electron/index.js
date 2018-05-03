@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { ipcMain, BrowserWindow } = require('electron');
+const { ipcMain, BrowserWindow,nativeImage, clipboard } = require('electron');
 
 function getURLFileContents(path) {
   return new Promise((resolve, reject) => {
@@ -27,6 +27,13 @@ const injectCapacitor = async function(url) {
     return url;
   }
 };
+
+ipcMain.on('writeImageToClipboard', (event, dataURL) => {
+  clipboard.write({
+    image: nativeImage.createFromDataURL(dataURL)
+  });
+});
+
 
 class CapacitorSplashScreen {
 

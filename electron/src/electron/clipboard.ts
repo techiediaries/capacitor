@@ -1,11 +1,11 @@
 import { WebPlugin, ClipboardPlugin,ClipboardWrite,ClipboardRead,ClipboardReadResult } from "@capacitor/core";
 
-const { clipboard , nativeImage } = require('electron');
-
+const { clipboard } = require('electron');
 
 
 export class ClipboardPluginElectron extends WebPlugin implements ClipboardPlugin {
 
+  ipc = require('electron').ipcRenderer;  
   constructor() {
     super({
       name: 'Clipboard',
@@ -27,9 +27,10 @@ export class ClipboardPluginElectron extends WebPlugin implements ClipboardPlugi
 
         } else if (options.image) {
             const dataURL = options.image;
-            clipboard.write({
+            /*clipboard.write({
                 image: nativeImage.createFromDataURL(dataURL)
-            });            
+            });*/
+            this.ipc.send('writeImageToClipboard', dataURL);            
         }
         return resolve();
     });
